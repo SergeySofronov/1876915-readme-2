@@ -1,0 +1,12 @@
+From: Sergey Sofronov <s@sofronov.local>
+To: Keks <keks@htmlacademy.local>
+Subject: Hello Keks
+Date: Mon, 12 Dec 2022 08:00:00
+Content-Type: text/html; charset=utf8
+
+<html>
+<body>
+Hello, Keks!
+I sent this email using the cli:
+curl smtp://localhost:5025 --mail-from s@sofronov.local --mail-rcpt keks@htmlacademy.local --upload-file ./email.example.txt
+</body>

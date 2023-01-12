@@ -3,13 +3,14 @@ import { ConfigService, registerAs } from '@nestjs/config';
 import { getMongoConnectionString } from '@readme/core';
 
 export const mongoDbOptions = registerAs('database', () => ({
-  name: process.env.MONGO_NAME,
-  host: process.env.MONGO_HOST,
-  port: parseInt(process.env.MONGO_PORT, 10),
-  user: process.env.MONGO_USER,
-  password: process.env.MONGO_PASSWORD,
-  authBase: process.env.MONGO_AUTH_BASE,
+    name: process.env.MONGO_NAME,
+    host: process.env.MONGO_HOST,
+    port: parseInt(process.env.MONGO_PORT, 10),
+    user: process.env.MONGO_USER,
+    password: process.env.MONGO_PASSWORD,
+    authBase: process.env.MONGO_AUTH_BASE,
 }));
+
 
 export function getMongoDbConfig(): MongooseModuleAsyncOptions {
     return {
