@@ -1,11 +1,10 @@
-import { ApiProperty, } from '@nestjs/swagger';
+import { ApiProperty, getSchemaPath, } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsEnum, IsBoolean, IsOptional, IsArray, ArrayMaxSize, IsObject, IsMongoId } from 'class-validator';
 import { PublicationContent, PublicationType, PublicationTypeObject, Tag } from '@readme/shared-types';
 import { PublicationValidity as PV } from '../publication.constant';
 import { TagMaxLength, TagMinLength, IsTagValidValue } from '../validation/publication-custom.decorators';
 import { ValidityMessage as VM } from '@readme/core';
-
 
 export class CreatePublicationDto {
   @ApiProperty({
@@ -44,7 +43,6 @@ export class CreatePublicationDto {
     description: 'The content of the publication. Depends on the type of publication',
     example: '{}',
     required: true,
-    //todo: как добавить пример типов объектов (т.е. контента)?
   })
   @IsObject()
   public content: PublicationContent;

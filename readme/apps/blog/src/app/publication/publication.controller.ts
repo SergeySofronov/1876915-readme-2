@@ -1,6 +1,7 @@
-import { Body, Post, Controller, Delete, Param, Query, Get, Patch, HttpCode, HttpStatus, Logger, UsePipes } from '@nestjs/common';
+import { Body, Post, Controller, Delete, Param, Query, Get, Patch, HttpCode, HttpStatus, Logger, UsePipes, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { fillObject } from '@readme/core';
+import { JwtAuthGuard } from '@readme/core';
 import { PublicationService } from './publication.service';
 import { CreatePublicationDto } from './dto/create-publication.dto';
 import { UpdatePublicationDto } from './dto/update-publication.dto';
@@ -18,6 +19,7 @@ export class PublicationController {
     private readonly logger: Logger,
   ) { }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/')
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
@@ -32,12 +34,14 @@ export class PublicationController {
     return fillObject(PublicationRto, newPublication);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('/:id')
   async update(@Param('id') id: number, @Body() dto: UpdatePublicationDto) {
     const updatedComment = await this.publicationService.updatePublication(id, dto);
     return fillObject(PublicationRto, updatedComment);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/:id')
   async show(@Param('id') id: number) {
     const existComment = await this.publicationService.getPublication(id);
@@ -50,6 +54,14 @@ export class PublicationController {
     return fillObject(PublicationRto, publications);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('/users/drafts')
+  async drafts(@Query() query: PublicationQuery) {
+    const publications = await this.publicationService.getPublications(query, false);
+    return fillObject(PublicationRto, publications);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiResponse({

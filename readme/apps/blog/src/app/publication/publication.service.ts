@@ -26,13 +26,13 @@ export class PublicationService {
   }
 
   async getPublication(id: number): Promise<Publication> {
-      //todo: здесь возвращать NOT_FOUND
+    //todo: здесь возвращать NOT_FOUND
     return this.publicationRepository.findById(id);
   }
 
-  async getPublications(query: PublicationQuery): Promise<Publication[]> {
+  async getPublications(query: PublicationQuery, isPublished?: boolean): Promise<Publication[]> {
     //todo: здесь возвращать NOT_FOUND
-    return this.publicationRepository.find(query);
+    return this.publicationRepository.find(query, isPublished);
   }
 
   async updatePublication(id: number, dto: UpdatePublicationDto): Promise<Publication> {
@@ -40,7 +40,7 @@ export class PublicationService {
     if (!existPublication) {
       throw new Error(`Publication with id ${id} doesn't exist`);
     }
-    return this.publicationRepository.update(id, {...dto, updatedAt: new Date()});
+    return this.publicationRepository.update(id, { ...dto, updatedAt: new Date() });
   }
 
 }

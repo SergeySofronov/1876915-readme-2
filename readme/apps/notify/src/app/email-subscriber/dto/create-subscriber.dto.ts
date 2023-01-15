@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsMongoId, IsNotEmpty, IsString } from 'class-validator';
 import { ValidityMessage as VM } from '@readme/core';
 
 export class CreateSubscriberDto {
@@ -6,11 +6,13 @@ export class CreateSubscriberDto {
   email: string;
 
   @IsNotEmpty({ message: VM.IsNotEmptyMessage })
+  @IsString()
   firstName: string;
 
-  @IsNotEmpty({ message: VM.IsNotEmptyMessage  })
+  @IsNotEmpty({ message: VM.IsNotEmptyMessage })
+  @IsString()
   lastName: string;
 
-  @IsNotEmpty({ message: VM.IsNotEmptyMessage  })
+  @IsMongoId({ message: VM.MongoIdMessage })
   userId: string;
 }

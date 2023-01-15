@@ -1,11 +1,11 @@
 import { ApiTags } from '@nestjs/swagger';
-import { Controller, Body, HttpStatus, Param, Post, Res, UseGuards } from '@nestjs/common';
+import { Controller, Body, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { fillObject} from '@readme/core';
+import { fillObject, JwtAuthGuard } from '@readme/core';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { SubscriptionRdo } from './rdo/subscription.rdo';
 import { SubscriptionService } from './subscription.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { SubscribeParamDecorator } from './decorators/sгbscribe-param.decorator';
 
 @ApiTags('subscriptions')
 @Controller('subscriptions')
@@ -16,7 +16,7 @@ export class SubscriptionController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/:isFollow')
-  async create(@Param('isFollow') isFollow: string, @Body() dto: CreateSubscriptionDto, @Res() res: Response) {
+  async create(@SubscribeParamDecorator('isFollow') isFollow: boolean, @Body() dto: CreateSubscriptionDto, @Res() res: Response) {
     if (isFollow) {
       const newSubscription = await this.subscriptionService.subscribe(dto);
       return res.status(HttpStatus.CREATED).json(fillObject(SubscriptionRdo, newSubscription));

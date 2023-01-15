@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { getMongoDbConfig, jwtOptions, mongoDbOptions, rabbitMqOptions } from '@readme/core';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { ENV_FILE_PATH } from './app.constant';
-import { jwtOptions } from '../config/jwt.config';
-import { getMongoDbConfig, mongoDbOptions } from '../config/mongodb.config';
+import { ENV_FILE_PATH_COMMON, ENV_FILE_PATH_USERS } from './app.constant';
 import { SubscriptionModule } from './subscription/subscription.module';
-import envSchema from './env.schema';
+import { envValidationSchema } from './env.validation.schema';
 
 /*
 Примечания.
@@ -25,9 +24,9 @@ import envSchema from './env.schema';
     ConfigModule.forRoot({
       cache: true,
       isGlobal: true,
-      envFilePath: ENV_FILE_PATH,
-      load: [mongoDbOptions, jwtOptions],
-      validationSchema: envSchema,
+      envFilePath: [ENV_FILE_PATH_USERS, ENV_FILE_PATH_COMMON],
+      load: [mongoDbOptions, jwtOptions, rabbitMqOptions],
+      validationSchema: envValidationSchema,
     }),
     MongooseModule.forRootAsync(getMongoDbConfig()),
     UserModule,
@@ -37,4 +36,4 @@ import envSchema from './env.schema';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

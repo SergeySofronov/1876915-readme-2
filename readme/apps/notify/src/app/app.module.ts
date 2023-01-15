@@ -1,21 +1,21 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ENV_FILE_PATH } from './app.constant';
-import { getMongoDbConfig, mongoDbOptions } from './config/mongodb.config';
-import { rabbitMqOptions } from './config/rabbitmq.config';
+import { ENV_FILE_PATH_NOTIFY } from './app.constant';
+import { getMongoDbConfig, mongoDbOptions, rabbitMqOptions } from '@readme/core';
 import { EmailSubscriberModule } from './email-subscriber/email-subscriber.module';
+import { envValidationSchema } from './env.validation.schema';
 import { MailModule } from './mail/mail.module';
-import envMongoSchema from './env.mongo.schema';
+import { mailOptions } from './mail/config/mail.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       cache: true,
       isGlobal: true,
-      envFilePath: ENV_FILE_PATH,
-      load: [mongoDbOptions, rabbitMqOptions],
-      validationSchema: envMongoSchema,
+      envFilePath: ENV_FILE_PATH_NOTIFY,
+      load: [mongoDbOptions, rabbitMqOptions, mailOptions],
+      validationSchema: envValidationSchema,
     }),
     MongooseModule.forRootAsync(getMongoDbConfig()),
     EmailSubscriberModule,
@@ -24,4 +24,4 @@ import envMongoSchema from './env.mongo.schema';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

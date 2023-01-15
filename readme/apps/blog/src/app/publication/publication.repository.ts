@@ -59,12 +59,13 @@ export class PublicationRepository implements CRUDRepositoryInterface<Publicatio
     });
   }
 
-  public async find({ limit, page, sortDirection, sortType, tags, userId }: PublicationQuery): Promise<Publication[]> {
+  public async find({ limit, page, sortDirection, sortType, tags, userId }: PublicationQuery, isPublished = true): Promise<Publication[]> {
     const sortField = { [PublicationSortField[sortType]]: sortDirection };
 
     return this.prisma.publication.findMany({
       take: limit,
       where: {
+        isPublished,
         userId,
         tags: {
           some: {

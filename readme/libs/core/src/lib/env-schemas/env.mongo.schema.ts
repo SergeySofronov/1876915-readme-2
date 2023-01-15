@@ -2,7 +2,7 @@ import * as Joi from 'joi';
 
 const DEFAULT_MONGO_DB_PORT = 27018;
 
-export default Joi.object({
+export const envMongoSchema = Joi.object({
   MONGO_NAME: Joi
     .string()
     .required(),

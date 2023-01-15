@@ -1,6 +1,7 @@
-import { Body, Post, Controller, Delete, Param, Query, HttpCode, HttpStatus, Get, Patch } from '@nestjs/common';
+import { Body, Post, Controller, Delete, Param, Query, HttpCode, HttpStatus, Get, Patch, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { fillObject } from '@readme/core';
+import { JwtAuthGuard } from '@readme/shared-types';
 import { CommentHandleMessages } from './comment.constant';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -14,6 +15,7 @@ export class CommentController {
     private readonly commentService: CommentService
   ) { }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/')
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
@@ -26,6 +28,7 @@ export class CommentController {
     return fillObject(CommentRto, newComment);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('/:id')
   async update(@Param('id') id: number, @Body() dto: UpdateCommentDto) {
     const updatedComment = await this.commentService.updateComment(id, dto);
@@ -38,6 +41,7 @@ export class CommentController {
     return fillObject(CommentRto, comments);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiResponse({

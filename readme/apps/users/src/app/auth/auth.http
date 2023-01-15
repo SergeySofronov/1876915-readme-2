@@ -4,7 +4,7 @@ Host: localhost:3333
 Content-Type: application/json
 
 {
-  "email": "filidor@zeleniy.ru",
+  "email": "nekromanser-box@yandex.ru",
   "dateBirth": "1965-11-17",
   "firstName": "Филидор",
   "lastName": "Зелёный",

@@ -1,3 +1,5 @@
+export const AUTH_RABBITMQ_CLIENT = Symbol('AUTH_RABBITMQ_CLIENT');
+
 export const UserAuthMessages = {
   ALREADY_EXISTS: 'User with this email already exists',
   NOT_FOUND: 'User not found',

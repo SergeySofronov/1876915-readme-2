@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Get, Param, HttpCode, HttpStatus, Patch, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { fillObject, MongoIdValidationPipe } from '@readme/core';
+import { JwtAuthGuard } from '@readme/core';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserRdo } from './rdo/user.rdo';
@@ -8,7 +9,6 @@ import { DetailedUserRdo } from './rdo/detailed-user.rdo';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserAuthMessages } from './auth.constant';
 import { LoggedUserRdo } from './rdo/logged-user.rdo';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -78,7 +78,6 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Patch('pass')
-  @HttpCode(HttpStatus.OK)
   @ApiResponse({
     type: DetailedUserRdo,
     status: HttpStatus.OK,

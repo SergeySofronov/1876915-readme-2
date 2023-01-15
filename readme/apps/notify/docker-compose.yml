@@ -2,7 +2,7 @@ version: '3.5'
 services:
   fakesmtp:
     image: gessnerfl/fake-smtp-server
-    container_name: readme.notify.fakesmtp
+    container_name: readme-notify-fakesmtp
     hostname: fakesmtp
     ports:
       - "5025:5025"
@@ -10,7 +10,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:3.11-management
-    container_name: readme.notify.rabbitmq
+    container_name: readme-notify-rabbitmq
     ports:
       - '5672:5672'
       - '8084:15672'
@@ -25,7 +25,7 @@ services:
 
   mongodb:
     image: mongo
-    container_name: readme.notify.mongodb
+    container_name: readme-notify-mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: 12345
@@ -44,7 +44,7 @@ services:
   mongodb-express:
     image: mongo-express
     restart: always
-    container_name: readme.notify.mongo-express
+    container_name: readme-notify-mongo-express
     ports:
       - 8085:8081
     environment:

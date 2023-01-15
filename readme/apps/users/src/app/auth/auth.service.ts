@@ -1,9 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@readme/shared-types';
+import { ClientProxy } from '@nestjs/microservices';
+import { CommandEvent, User, Subscriber } from '@readme/shared-types';
+import { createEvent } from '@readme/core'
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from '../user/user.entity';
-import { UserAuthMessages } from './auth.constant';
+import { AUTH_RABBITMQ_CLIENT, UserAuthMessages } from './auth.constant';
 import { UserRepository } from '../user/user.repository';
 import { LoginUserDto } from './dto/login-user.dto';
 
@@ -12,6 +14,7 @@ export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
+    @Inject(AUTH_RABBITMQ_CLIENT) private readonly rabbitClient: ClientProxy,
   ) { }
 
   async register(dto: CreateUserDto) {
@@ -19,12 +22,23 @@ export class AuthService {
     const existUser = await this.userRepository.findByEmail(email);
 
     if (existUser) {
-      throw new UnauthorizedException(UserAuthMessages.ALREADY_EXISTS);
+      throw new Error(UserAuthMessages.ALREADY_EXISTS);
     }
 
     const userEntity = await new UserEntity(dto).setPassword(password);
+    const createdUser = await this.userRepository.create(userEntity);
 
-    return this.userRepository.create(userEntity);
+    this.rabbitClient.emit<unknown, Subscriber>(
+      createEvent(CommandEvent.AddSubscriber),
+      {
+        email: createdUser.email,
+        firstName: createdUser.firstName,
+        lastName: createdUser.lastName,
+        userId: createdUser._id.toString(),
+      }
+    );
+
+    return createdUser;
   }
 
   async verifyUser(dto: LoginUserDto) {

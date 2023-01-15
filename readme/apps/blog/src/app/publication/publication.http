@@ -1,7 +1,7 @@
 # Создать публикацию
 POST /blog/publications/ HTTP/1.1
 Host: localhost:3334
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InZhbnlhM0BydXNzaWFuLnJ1IiwidXNlcklkIjoiNjJiOWY3YjI3MGY0OTZjNjczODIyNzJjIiwibmFtZSI6IlZhbnlhIFJ1c3NpYW4iLCJhdmF0YXIiOiJSTjhkOTh1NVBDbU1CZGlTREdfcGIuanBlZyIsImlhdCI6MTY1NjgzNTYxMSwiZXhwIjoxNjU2ODc4ODExfQ.YHAwjl1xwaPXpAI2dTGAw2pX3sKnEUsWyVPdUlJsTAE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2JkYmM5ODhhZTliZGNmY2U5NGUzNTciLCJlbWFpbCI6ImZpbGlkb3JAemVsZW5peS5ydSIsImZpcnN0TmFtZSI6ItCk0LjQu9C40LTQvtGAIiwibGFzdE5hbWUiOiLQl9C10LvRkdC90YvQuSIsImlhdCI6MTY3MzcyMTM2OSwiZXhwIjoxNjczNzIxNTQ5fQ.hnFPGz9C1G83yg-tqJWSZvZYAaRZE6HsWgL34GkdMWE
 Content-Type: application/json
 
 # {
@@ -16,7 +16,7 @@ Content-Type: application/json
 
 {
   "type": "Video",
-  "tags": ["myvideo", "greatest", "myvideo#1"],
+  "tags": ["myvideo", "greatest", "myvideo"],
   "userId": "63b9e82c804280c503523c3d",
   "content": {
     "title": "Приключения электроника",
@@ -34,6 +34,7 @@ Content-Type: application/json
 {
   "type": "Video",
   "tags": ["awesome", "прикалисы"],
+  "isPublished": false,
   "content": {
     "title": "Гостья из будущего (Приключения Алисы)",
     "videoLink": "www.youtube.com/video"
@@ -48,7 +49,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InZhbnlhM0BydXNzaWFuLnJ1I
 ###
 
 # Получить публикацию по ID
-GET /blog/publications/19 HTTP/1.1
+GET /blog/publications/10 HTTP/1.1
 Host: localhost:3334
 ###
 
@@ -59,7 +60,7 @@ Host: localhost:3334
 ###
 
 # Получить список черновиков публикаций пользователя (лимит, пагинация, сортировка)
-GET /blog/publications/user/drafts/ HTTP/1.1
+GET /blog/publications/users/drafts HTTP/1.1
 Host: localhost:3334
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InZhbnlhM0BydXNzaWFuLnJ1IiwidXNlcklkIjoiNjJiOWY3YjI3MGY0OTZjNjczODIyNzJjIiwibmFtZSI6IlZhbnlhIFJ1c3NpYW4iLCJhdmF0YXIiOiJSTjhkOTh1NVBDbU1CZGlTREdfcGIuanBlZyIsImlhdCI6MTY1NjgzNTYxMSwiZXhwIjoxNjU2ODc4ODExfQ.YHAwjl1xwaPXpAI2dTGAw2pX3sKnEUsWyVPdUlJsTAE
 ###

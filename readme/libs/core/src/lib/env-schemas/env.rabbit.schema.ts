@@ -1,8 +1,8 @@
 import * as Joi from 'joi';
 
-const RABBIT_NOTIFY_SERVICE_QUEUE = 'Classic';
+const DEFAULT_RABBIT_PORT = 5672;
 
-export default Joi.object({
+export const envRabbitSchema = Joi.object({
   RABBIT_USER: Joi
     .string()
     .required(),
@@ -10,10 +10,14 @@ export default Joi.object({
     .string()
     .hostname()
     .required(),
+  RABBIT_PORT: Joi
+    .number()
+    .port()
+    .default(DEFAULT_RABBIT_PORT)
+    .required(),
   RABBIT_PASSWORD: Joi
     .string(),
-  RABBIT_NOTIFY_SERVICE_QUEUE: Joi
-    .string()
-    .default(RABBIT_NOTIFY_SERVICE_QUEUE)
-    .required()
 });
+
+
+
