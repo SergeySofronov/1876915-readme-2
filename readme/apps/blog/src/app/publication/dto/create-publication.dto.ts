@@ -1,4 +1,4 @@
-import { ApiProperty, getSchemaPath, } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsEnum, IsBoolean, IsOptional, IsArray, ArrayMaxSize, IsObject, IsMongoId } from 'class-validator';
 import { PublicationContent, PublicationType, PublicationTypeObject, Tag } from '@readme/shared-types';
@@ -36,7 +36,7 @@ export class CreatePublicationDto {
   @Transform(({ value }) => Array.from(new Set<string>(value)).map((item) => ({ name: item.toLowerCase() })))
   @TagMinLength(PV.TagMinLength, { message: VM.MinValueMessage })
   @TagMaxLength(PV.TagMaxLength, { message: VM.MaxValueMessage })
-  @IsTagValidValue(new RegExp('^[a-z\\u0400-\\u04FF]+$', 'i'), { message: VM.IsValidValue })
+  @IsTagValidValue(new RegExp('^[a-z\\u0400-\\u04FF]+$', 'i'), { message: VM.IsValidValueMessage })
   public tags: Tag[];
 
   @ApiProperty({

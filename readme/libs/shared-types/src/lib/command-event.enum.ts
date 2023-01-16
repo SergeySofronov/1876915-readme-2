@@ -1,4 +1,5 @@
 export enum CommandEvent {
   AddSubscriber = 'addSubscriber',
-  AddPublication = 'addPublication',
+  getPublicationDate = 'getPublicationDate',
+  sendPublications = 'sendPublications',
 }

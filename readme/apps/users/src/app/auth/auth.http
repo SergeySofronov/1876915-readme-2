@@ -4,7 +4,7 @@ Host: localhost:3333
 Content-Type: application/json
 
 {
-  "email": "nekromanser-box@yandex.ru",
+  "email": "filidor@zeleniy4.ru",
   "dateBirth": "1965-11-17",
   "firstName": "Филидор",
   "lastName": "Зелёный",
@@ -63,7 +63,13 @@ Host: localhost:3333
 Content-Type: application/json
 
 {
-  "email": "filidor@zeleniy.ru",
+  "email": "filidor@zeleniy4.ru",
   "password": "123456"
 }
+###
+
+# Запуск рассылки уведомлений
+POST  /users/auth/notify HTTP/1.1
+Host: localhost:3333
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1NGRjNmM4MDQ1YjhlYWE2M2NhODYiLCJlbWFpbCI6ImZpbGlkb3JAemVsZW5peTQucnUiLCJmaXJzdE5hbWUiOiLQpNC40LvQuNC00L7RgCIsImxhc3ROYW1lIjoi0JfQtdC70ZHQvdGL0LkiLCJpYXQiOjE2NzM4Nzg1NzgsImV4cCI6MTY3Mzg3ODc1OH0.06kJE_ZWWFfMgbeaX11VxiM6lW_B2phDJXqQiKDGcZg
 ###

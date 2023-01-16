@@ -1,7 +1,7 @@
 import { Body, Post, Controller, Delete, Param, Query, HttpCode, HttpStatus, Get, Patch, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { fillObject } from '@readme/core';
-import { JwtAuthGuard } from '@readme/shared-types';
+import { JwtAuthGuard } from '@readme/core';
 import { CommentHandleMessages } from './comment.constant';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -52,6 +52,4 @@ export class CommentController {
     const commentId = parseInt(id, 10);
     this.commentService.deleteComment(commentId);
   }
-
-
 }

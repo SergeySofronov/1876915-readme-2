@@ -1,14 +1,13 @@
-export const AUTH_RABBITMQ_CLIENT = Symbol('AUTH_RABBITMQ_CLIENT');
-
 export const UserAuthMessages = {
   ALREADY_EXISTS: 'User with this email already exists',
   NOT_FOUND: 'User not found',
   WRONG_PASSWORD: 'User password is wrong',
   WRONG_LOGIN: 'User login is wrong.',
-  CREATED: 'The new user has been successfully created.',
-  UPDATED: 'The user has been successfully updated.',
-  LOGGED: 'User has been successfully logged.',
-  PASSWORD_CHANGED: "The user's password has been successfully updated",
+  CREATE: 'Creates a new user.',
+  UPDATE: "Updates the user's profile data",
+  LOGIN: "User's login procedure",
+  PASSWORD_CHANGE: "Updates the user's password",
+  NOTIFY: 'Launching notification distribution',
 } as const;
 
 export enum UserValidity {

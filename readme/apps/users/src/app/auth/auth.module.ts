@@ -7,8 +7,7 @@ import { getJwtConfig, getRabbitMqConfig, JwtStrategy } from '@readme/core';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { AUTH_RABBITMQ_CLIENT } from './auth.constant';
-import { NotifyQueue } from '@readme/shared-types';
+import { NotifyQueue, RabbitClient } from '@readme/shared-types';
 
 
 @Module({
@@ -22,8 +21,13 @@ import { NotifyQueue } from '@readme/shared-types';
     }),
     ClientsModule.registerAsync([
       {
-        name: AUTH_RABBITMQ_CLIENT,
+        name: RabbitClient.AUTH_RABBITMQ_CLIENT,
         useFactory: (configService: ConfigService)=>getRabbitMqConfig(configService, NotifyQueue.Subscribers),
+        inject: [ConfigService]
+      },
+      {
+        name: RabbitClient.PUBLICATION_RABBITMQ_CLIENT,
+        useFactory: (configService: ConfigService)=>getRabbitMqConfig(configService, NotifyQueue.getPublications),
         inject: [ConfigService]
       }
     ]),

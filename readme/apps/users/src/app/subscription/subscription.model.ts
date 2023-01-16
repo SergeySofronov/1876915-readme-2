@@ -8,10 +8,10 @@ import { Subscription } from '@readme/shared-types';
 export class SubscriptionModel extends Document implements Subscription {
 
   @Prop({ required: true, trim: true })
-  bloggerId: string;
+  public bloggerId: string;
 
   @Prop({ required: true, trim: true })
-  followerId: string;
+  public followerId: string;
 }
 
 export const SubscriptionSchema = SchemaFactory.createForClass(SubscriptionModel);

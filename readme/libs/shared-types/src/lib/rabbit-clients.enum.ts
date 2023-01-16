@@ -1,0 +1,4 @@
+export const RabbitClient = {
+  AUTH_RABBITMQ_CLIENT: Symbol('AUTH_RABBITMQ_CLIENT'),
+  PUBLICATION_RABBITMQ_CLIENT: Symbol('PUBLICATION_RABBITMQ_CLIENT'),
+} as const;

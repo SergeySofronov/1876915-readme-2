@@ -8,6 +8,7 @@ export enum ValidityMessage {
   IsNotEmptyMessage = 'Field \u00AB$property\u00BB must not be empty',
   MinValueMessage = 'Field \u00AB$property\u00BB value/length must be equal or greater than $constraint1',
   MaxValueMessage = 'Field \u00AB$property\u00BB value/length must be equal or less than $constraint1',
-  IsValidValue = 'Field \u00AB$property\u00BB values must starts with letter and contains of numbers and letters',
+  IsValidValueMessage = 'Field \u00AB$property\u00BB values must starts with letter and contains of numbers and letters',
+  IsDateMessage = 'Field \u00AB$property\u00BB values must be a Date object',
   MongoIdMessage = 'Field \u00AB$property\u00BB value must be valid ObjectID',
 }

@@ -9,4 +9,5 @@ export type User = {
   password: string;
   publicationCount?: number;
   subscriberCount?: number;
+  lastPublicationDate?: Date;
 }

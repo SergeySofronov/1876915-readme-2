@@ -7,31 +7,34 @@ import { User } from '@readme/shared-types';
 })
 export class UserModel extends Document implements User {
   @Prop({ required: true, trim: true, unique: true })
-  email: string;
+  public email: string;
 
   @Prop({ required: true, trim: true })
-  firstName: string;
+  public firstName: string;
 
   @Prop({ required: true, trim: true })
-  lastName: string;
+  public lastName: string;
 
   @Prop({ trim: true, default: '' })
-  avatar: string;
+  public avatar: string;
 
   @Prop({ required: true, trim: true, default: new Date() })
-  createdAt: Date;
+  public createdAt: Date;
 
   @Prop({ required: true, trim: true, default: new Date() })
-  updatedAt: Date;
+  public updatedAt: Date;
 
   @Prop({ required: true, trim: true })
-  password: string;
+  public password: string;
 
   @Prop({ required: true, min: 0, default: 0 })
-  publicationCount: number;
+  public publicationCount: number;
 
   @Prop({ required: true, min: 0, default: 0 })
-  subscribersCount: number;
+  public subscribersCount: number;
+
+  @Prop({ required: true, trim: true, default: new Date() })
+  public lastPublicationDate: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);

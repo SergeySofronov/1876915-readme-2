@@ -14,6 +14,7 @@ export class UserEntity implements Entity<UserEntity, User>, User {
   public password: string;
   public createdAt: Date;
   public updatedAt: Date;
+  public lastPublicationDate: Date;
 
   constructor(user: User) {
     this.fillEntity(user);
@@ -40,7 +41,8 @@ export class UserEntity implements Entity<UserEntity, User>, User {
     this.firstName = user.firstName;
     this.lastName = user.lastName;
     this.password = user.password;
-    this.createdAt = new Date();
-    this.updatedAt = new Date();
+    this.createdAt = user.createdAt || new Date();
+    this.updatedAt = user.updatedAt || new Date();
+    this.lastPublicationDate = user.lastPublicationDate || new Date();
   }
 }

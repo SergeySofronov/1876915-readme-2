@@ -3,16 +3,16 @@ import { ValidityMessage as VM } from '@readme/core';
 
 export class CreateSubscriberDto {
   @IsEmail({}, { message: VM.IsEmailMessage })
-  email: string;
+  public email: string;
 
   @IsNotEmpty({ message: VM.IsNotEmptyMessage })
   @IsString()
-  firstName: string;
+  public firstName: string;
 
   @IsNotEmpty({ message: VM.IsNotEmptyMessage })
   @IsString()
-  lastName: string;
+  public lastName: string;
 
   @IsMongoId({ message: VM.MongoIdMessage })
-  userId: string;
+  public userId: string;
 }

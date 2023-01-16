@@ -1,4 +1,5 @@
-import { Body, Controller, Post, Get, Param, HttpCode, HttpStatus, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Get, Param, HttpCode, HttpStatus, Patch, UseGuards, Req, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { fillObject, MongoIdValidationPipe } from '@readme/core';
 import { JwtAuthGuard } from '@readme/core';
@@ -9,6 +10,7 @@ import { DetailedUserRdo } from './rdo/detailed-user.rdo';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserAuthMessages } from './auth.constant';
 import { LoggedUserRdo } from './rdo/logged-user.rdo';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -22,7 +24,7 @@ export class AuthController {
   @ApiResponse({
     type: UserRdo,
     status: HttpStatus.CREATED,
-    description: UserAuthMessages.CREATED,
+    description: UserAuthMessages.CREATE,
   })
   @ApiResponse({
     type: UserRdo,
@@ -38,7 +40,7 @@ export class AuthController {
   @ApiResponse({
     type: LoggedUserRdo,
     status: HttpStatus.OK,
-    description: UserAuthMessages.LOGGED,
+    description: UserAuthMessages.LOGIN,
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
@@ -65,15 +67,16 @@ export class AuthController {
   @ApiResponse({
     type: DetailedUserRdo,
     status: HttpStatus.OK,
-    description: UserAuthMessages.UPDATED,
+    description: UserAuthMessages.UPDATE,
   })
   @ApiResponse({
     type: UserRdo,
     status: HttpStatus.NOT_FOUND,
     description: UserAuthMessages.NOT_FOUND,
   })
-  async update() {
-    throw new Error('Method not implemented')
+  async update(@Req() req, @Body() dto: UpdateUserDto) {
+    const updatedUser = await this.authService.updateUser(req.user.sub, dto);
+    return fillObject(UserRdo, updatedUser);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -81,7 +84,7 @@ export class AuthController {
   @ApiResponse({
     type: DetailedUserRdo,
     status: HttpStatus.OK,
-    description: UserAuthMessages.PASSWORD_CHANGED,
+    description: UserAuthMessages.PASSWORD_CHANGE,
   })
   @ApiResponse({
     type: UserRdo,
@@ -95,5 +98,22 @@ export class AuthController {
   })
   async changePassword() {
     throw new Error('Method not implemented')
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('notify')
+  @ApiResponse({
+    type: DetailedUserRdo,
+    status: HttpStatus.OK,
+    description: UserAuthMessages.NOTIFY,
+  })
+  @ApiResponse({
+    type: UserRdo,
+    status: HttpStatus.NOT_FOUND,
+    description: UserAuthMessages.NOT_FOUND,
+  })
+  async notify(@Req() req, @Res() res: Response) {
+    await this.authService.notifyNewPublications(req.user.sub);
+    return res.status(HttpStatus.OK).send();
   }
 }

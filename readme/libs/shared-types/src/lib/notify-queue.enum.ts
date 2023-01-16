@@ -1,4 +1,5 @@
 export enum NotifyQueue {
   Subscribers = 'readme-subscribers',
-  Publications = 'readme-publications',
+  getPublications = 'readme-get-publications',
+  sendPublications = 'readme-send-publications',
 }

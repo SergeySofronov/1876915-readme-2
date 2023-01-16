@@ -4,7 +4,7 @@ import { CRUDRepositoryInterface } from '@readme/core';
 import { Publication } from '@readme/shared-types';
 import { PublicationEntity } from './publication.entity';
 import { PublicationQuery } from './query/publication.query';
-import { PublicationSortField } from './publication.constant';
+import { DEFAULT_PUBLICATION_QUERY_LIMIT, PublicationSort, PublicationSortField } from './publication.constant';
 
 @Injectable()
 export class PublicationRepository implements CRUDRepositoryInterface<PublicationEntity, number, Publication> {
@@ -59,13 +59,19 @@ export class PublicationRepository implements CRUDRepositoryInterface<Publicatio
     });
   }
 
-  public async find({ limit, page, sortDirection, sortType, tags, userId }: PublicationQuery, isPublished = true): Promise<Publication[]> {
+  public async find({
+    limit = DEFAULT_PUBLICATION_QUERY_LIMIT,
+    page = 1,
+    sortDirection = 'desc',
+    sortType = PublicationSort.Date,
+    tags,
+    userId }: PublicationQuery, options?: Record<string, unknown>): Promise<Publication[]> {
     const sortField = { [PublicationSortField[sortType]]: sortDirection };
 
     return this.prisma.publication.findMany({
       take: limit,
       where: {
-        isPublished,
+        ...options ?? {},
         userId,
         tags: {
           some: {

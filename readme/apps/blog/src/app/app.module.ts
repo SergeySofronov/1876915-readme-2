@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CommentModule } from './comment/comment.module';
-import { jwtOptions } from '@readme/core';
+import { jwtOptions, rabbitMqOptions } from '@readme/core';
 import { PublicationModule } from './publication/publication.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ENV_FILE_PATH_COMMON } from './app.constant';
@@ -16,7 +16,7 @@ import { envValidationSchema } from './env.validation.schema';
       cache: true,
       isGlobal: true,
       envFilePath: [ENV_FILE_PATH_COMMON],
-      load: [jwtOptions],
+      load: [jwtOptions, rabbitMqOptions],
       validationSchema: envValidationSchema,
     }),
   ],

@@ -15,7 +15,7 @@ export class UserRepository implements CRUDRepositoryInterface<UserEntity, strin
   ) { }
 
   public async findById(id: string): Promise<User | null> {
-    return this.userModel.findOne({ id }).exec();
+    return this.userModel.findById(id).exec();
   }
 
   public async findByEmail(email: string): Promise<User | null> {
@@ -29,8 +29,8 @@ export class UserRepository implements CRUDRepositoryInterface<UserEntity, strin
     return newUser;
   }
 
-  public async update(id: string, item: UserEntity): Promise<User> {
-    return this.userModel.findByIdAndUpdate(id, item.toObject(), { new: true }).exec();
+  public async update(id: string, item: Partial<User>): Promise<User> {
+    return this.userModel.findByIdAndUpdate(id, item, { new: true }).exec();
   }
 
   public async destroy(id: string): Promise<void> {

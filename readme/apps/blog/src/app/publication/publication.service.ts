@@ -1,15 +1,20 @@
-import { Injectable } from '@nestjs/common';
-import { Publication } from '@readme/shared-types';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { createEvent } from '@readme/core';
+import { CommandEvent, NotifyPublications, Publication, RabbitClient } from '@readme/shared-types';
 import { PublicationEntity } from './publication.entity';
 import { PublicationRepository } from './publication.repository';
 import { CreatePublicationDto } from './dto/create-publication.dto';
 import { UpdatePublicationDto } from './dto/update-publication.dto';
 import { PublicationQuery } from './query/publication.query';
+import { DEFAULT_PUBLICATION_QUERY_LIMIT } from './publication.constant';
+import { NotifyPublicationsDto } from './dto/notify-publications.dto';
 
 @Injectable()
 export class PublicationService {
   constructor(
     private readonly publicationRepository: PublicationRepository,
+    @Inject(RabbitClient.PUBLICATION_RABBITMQ_CLIENT) private readonly rabbitPubClient: ClientProxy,
   ) { }
 
   async createPublication(dto: CreatePublicationDto): Promise<Publication> {
@@ -30,9 +35,9 @@ export class PublicationService {
     return this.publicationRepository.findById(id);
   }
 
-  async getPublications(query: PublicationQuery, isPublished?: boolean): Promise<Publication[]> {
+  async getPublications(query: PublicationQuery, options?: Record<string, unknown>): Promise<Publication[]> {
     //todo: здесь возвращать NOT_FOUND
-    return this.publicationRepository.find(query, isPublished);
+    return this.publicationRepository.find(query, options);
   }
 
   async updatePublication(id: number, dto: UpdatePublicationDto): Promise<Publication> {
@@ -41,6 +46,21 @@ export class PublicationService {
       throw new Error(`Publication with id ${id} doesn't exist`);
     }
     return this.publicationRepository.update(id, { ...dto, updatedAt: new Date() });
+  }
+
+  public async sendPublicationForNotify({ userId, lastPublicationDate }: NotifyPublicationsDto) {
+    const publications = await this.getPublications({ limit: DEFAULT_PUBLICATION_QUERY_LIMIT, userId }, { createdAt: { gt: lastPublicationDate } })
+
+    if (publications?.length) {
+      this.rabbitPubClient.emit<unknown, NotifyPublications>(
+        createEvent(CommandEvent.sendPublications),
+        {
+          publications
+        }
+      );
+    }
+
+    return;
   }
 
 }

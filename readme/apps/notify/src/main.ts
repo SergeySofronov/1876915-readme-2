@@ -13,9 +13,9 @@ async function bootstrap() {
 
   const configService = app.get<ConfigService>(ConfigService);
 
-  //Создаем две очереди Subscribers и Publications
+  //Создаем очереди
   app.connectMicroservice(getRabbitMqConfig(configService, NotifyQueue.Subscribers));
-  app.connectMicroservice(getRabbitMqConfig(configService, NotifyQueue.Publications));
+  app.connectMicroservice(getRabbitMqConfig(configService, NotifyQueue.sendPublications));
 
   await app.startAllMicroservices();
   Logger.log(`🚀 Notify service is running on`);

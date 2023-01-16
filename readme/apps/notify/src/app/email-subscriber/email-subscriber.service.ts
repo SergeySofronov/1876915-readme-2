@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Publication } from '@readme/shared-types';
 import { EmailSubscriberRepository } from './email-subscriber.repository';
 import { CreateSubscriberDto } from './dto/create-subscriber.dto';
 import { EmailSubscriberEntity } from './email-subscriber.entity';
@@ -23,5 +24,15 @@ export class EmailSubscriberService {
     this.mailService.sendNotifyNewSubscriber(subscriber);
 
     return this.emailSubscriberRepository.create(new EmailSubscriberEntity(subscriber));
+  }
+
+  public async sendNotifyNewPublication(publications: Publication[]) {
+    const existsSubscribers = await this.emailSubscriberRepository.findAll();
+
+    if (existsSubscribers?.length) {
+      for (const subscriber of existsSubscribers) {
+        this.mailService.sendNotifyNewPublication(subscriber, publications);
+      }
+    }
   }
 }

@@ -26,7 +26,7 @@ export class MailService {
       template: './add-publication',
       context: {
         user: `${subscriber.firstName} ${subscriber.lastName}`,
-        publications: `${publicationList.map((item)=>`<li>${item.id}</li>`)}`,
+        publications: `${publicationList.map((item)=>`${item.id}`)}`,
       }
     })
   }

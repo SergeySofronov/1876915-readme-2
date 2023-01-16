@@ -1,4 +1,4 @@
-export interface Subscriber {
+export type Subscriber = {
   id?: string;
   userId: string;
   email: string;

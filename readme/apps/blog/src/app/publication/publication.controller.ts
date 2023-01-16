@@ -2,6 +2,7 @@ import { Body, Post, Controller, Delete, Param, Query, Get, Patch, HttpCode, Htt
 import { ApiResponse } from '@nestjs/swagger';
 import { fillObject } from '@readme/core';
 import { JwtAuthGuard } from '@readme/core';
+import { CommandEvent as CM } from '@readme/shared-types';
 import { PublicationService } from './publication.service';
 import { CreatePublicationDto } from './dto/create-publication.dto';
 import { UpdatePublicationDto } from './dto/update-publication.dto';
@@ -10,6 +11,8 @@ import { PublicationRto } from './rto/publication.rto';
 import { DetailedPublicationRto } from './rto/detailed-publication.rto';
 import { PublicationValidationPipe } from './validation/publication-validation.pipe';
 import { PublicationQuery } from './query/publication.query';
+import { EventPattern } from '@nestjs/microservices';
+import { NotifyPublicationsDto } from './dto/notify-publications.dto';
 import contentValidationSchema from './validation/content-validation.schema'
 
 @Controller('publications')
@@ -57,7 +60,7 @@ export class PublicationController {
   @UseGuards(JwtAuthGuard)
   @Get('/users/drafts')
   async drafts(@Query() query: PublicationQuery) {
-    const publications = await this.publicationService.getPublications(query, false);
+    const publications = await this.publicationService.getPublications(query, { isPublished: false });
     return fillObject(PublicationRto, publications);
   }
 
@@ -70,5 +73,10 @@ export class PublicationController {
   })
   async destroy(@Param('id') id: number) {
     this.publicationService.deletePublication(id);
+  }
+
+  @EventPattern({ cmd: CM.getPublicationDate })
+  public async notify(dto: NotifyPublicationsDto) {
+    return await this.publicationService.sendPublicationForNotify(dto);
   }
 }
