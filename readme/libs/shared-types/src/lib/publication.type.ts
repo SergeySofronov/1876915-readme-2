@@ -17,7 +17,7 @@ type QuotePublication = {
 }
 
 type PhotoPublication = {
-  upload: string;
+  photo: string;
 }
 
 type LinkPublication = {

@@ -9,6 +9,8 @@ import { UpdatePublicationDto } from './dto/update-publication.dto';
 import { PublicationQuery } from './query/publication.query';
 import { DEFAULT_PUBLICATION_QUERY_LIMIT } from './publication.constant';
 import { NotifyPublicationsDto } from './dto/notify-publications.dto';
+import { HttpException } from '@nestjs/common/exceptions';
+import { HttpStatus } from '@nestjs/common/enums';
 
 @Injectable()
 export class PublicationService {
@@ -25,25 +27,32 @@ export class PublicationService {
   async deletePublication(id: number): Promise<void> {
     const existPublication = await this.publicationRepository.findById(id);
     if (!existPublication) {
-      throw new Error(`Publication with id ${id} doesn't exist`);
+      throw new HttpException(`Publication with id ${id} doesn't exist`, HttpStatus.NOT_FOUND);
     }
     this.publicationRepository.destroy(id);
   }
 
   async getPublication(id: number): Promise<Publication> {
-    //todo: здесь возвращать NOT_FOUND
-    return this.publicationRepository.findById(id);
+    const existPublication = await this.publicationRepository.findById(id);
+    if (!existPublication) {
+      throw new HttpException(`Publication with id ${id} doesn't exist`, HttpStatus.NOT_FOUND);
+    }
+
+    return existPublication;
   }
 
   async getPublications(query: PublicationQuery, options?: Record<string, unknown>): Promise<Publication[]> {
-    //todo: здесь возвращать NOT_FOUND
-    return this.publicationRepository.find(query, options);
+    const existPublications = await this.publicationRepository.find(query, options);
+    if (!existPublications?.length) {
+      throw new HttpException(`Publications not found`, HttpStatus.NOT_FOUND);
+    }
+    return existPublications;
   }
 
   async updatePublication(id: number, dto: UpdatePublicationDto): Promise<Publication> {
     const existPublication = await this.publicationRepository.findById(id);
     if (!existPublication) {
-      throw new Error(`Publication with id ${id} doesn't exist`);
+      throw new HttpException(`Publication with id ${id} doesn't exist`, HttpStatus.NOT_FOUND);
     }
     return this.publicationRepository.update(id, { ...dto, updatedAt: new Date() });
   }
@@ -53,7 +62,7 @@ export class PublicationService {
 
     if (publications?.length) {
       this.rabbitPubClient.emit<unknown, NotifyPublications>(
-        createEvent(CommandEvent.sendPublications),
+        createEvent(CommandEvent.SendPublications),
         {
           publications
         }

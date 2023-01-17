@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { getMongoDbConfig, jwtOptions, mongoDbOptions, rabbitMqOptions } from '@readme/core';
+import { fileUploadOptions, getMongoDbConfig, jwtOptions, mongoDbOptions, rabbitMqOptions } from '@readme/core';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ENV_FILE_PATH_COMMON, ENV_FILE_PATH_USERS } from './app.constant';
@@ -25,7 +25,7 @@ import { envValidationSchema } from './env.validation.schema';
       cache: true,
       isGlobal: true,
       envFilePath: [ENV_FILE_PATH_USERS, ENV_FILE_PATH_COMMON],
-      load: [mongoDbOptions, jwtOptions, rabbitMqOptions],
+      load: [mongoDbOptions, jwtOptions, rabbitMqOptions, fileUploadOptions],
       validationSchema: envValidationSchema,
     }),
     MongooseModule.forRootAsync(getMongoDbConfig()),

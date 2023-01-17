@@ -30,7 +30,7 @@ export default Joi.object({
     .when('type', {
       is: Joi.equal(PublicationType.Photo),
       then: Joi.object({
-        upload: Joi.binary().max(pv.PhotoMaxSize).required(),
+        photo: Joi.string().required(),
       })
     })
     .when('type', {
