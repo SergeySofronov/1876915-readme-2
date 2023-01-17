@@ -4,6 +4,7 @@ import {
   Patch, UseGuards, Req, Res,
   UseInterceptors, UploadedFile,
 } from '@nestjs/common';
+import { resolve } from 'path'
 import { Response, Request } from 'express';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { fillObject, getMulterOptions, MongoIdValidationPipe } from '@readme/core';
@@ -17,7 +18,6 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { UserAuthMessages } from './auth.constant';
 import { LoggedUserRdo } from './rdo/logged-user.rdo';
 import { UpdateUserDto } from './dto/update-user.dto';
-import path = require('path');
 import { ChangeUserPasswordDto } from './dto/change-user-password.dto';
 
 @ApiTags('auth')
@@ -137,6 +137,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('avatar/:image')
   public async read(@Param('image') image: string, @Req() req: Request, @Res() res: Response) {
-    return res.sendFile(path.resolve(__dirname, process.env.FILE_UPLOAD_DEST, req.user['sub'], image));
+    return res.sendFile(resolve(__dirname, process.env.FILE_UPLOAD_DEST, req.user['sub'], image));
   }
 }
