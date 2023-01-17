@@ -9,9 +9,9 @@ import { UserAuthMessages } from './auth.constant';
 import { UserRepository } from '../user/user.repository';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { existsSync, unlinkSync } from 'fs';
-import path = require('path');
 import { ChangeUserPasswordDto } from './dto/change-user-password.dto';
+import { existsSync, unlinkSync } from 'fs';
+import { resolve } from 'path'
 
 @Injectable()
 export class AuthService {
@@ -104,7 +104,7 @@ export class AuthService {
 
     const userAvatar = existUser?.avatar;
     if (userAvatar && dto.avatar) {
-      const avatarPath = path.resolve(__dirname, `${process.env.FILE_UPLOAD_DEST}/${existUser._id.toString()}/${userAvatar}`);
+      const avatarPath = resolve(__dirname, `${process.env.FILE_UPLOAD_DEST}/${existUser._id.toString()}/${userAvatar}`);
       if (existsSync(avatarPath)) {
         console.log(avatarPath)
         unlinkSync(avatarPath);

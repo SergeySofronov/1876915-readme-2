@@ -4,8 +4,7 @@ import { CommandEvent } from '@readme/shared-types'
 import { existsSync, mkdirSync } from 'fs';
 import { diskStorage } from 'multer';
 import { Request } from 'express';
-import path = require('path');
-import { extname } from 'path';
+import { extname, resolve } from 'path';
 
 export function fillObject<T, V>(someDto: ClassConstructor<T>, plainObject: V, groups?: string[]) {
   const options: ClassTransformOptions = { excludeExtraneousValues: true };
@@ -28,7 +27,7 @@ export function getMulterOptions() {
     storage: diskStorage({
       destination: (req: Request, _file: Express.Multer.File, callback: (error: Error | null, destination: string) => void) => {
         const folderName = req.user['sub'];
-        const folderPath = path.resolve(__dirname, process.env.FILE_UPLOAD_DEST, folderName);
+        const folderPath = resolve(__dirname, process.env.FILE_UPLOAD_DEST, folderName);
         const isFolderExists = existsSync(folderPath) || mkdirSync(folderPath, { recursive: true });
 
         if (isFolderExists) {

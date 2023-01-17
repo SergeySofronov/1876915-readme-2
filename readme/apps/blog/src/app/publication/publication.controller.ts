@@ -2,6 +2,7 @@ import {
   Body, Post, Controller, Delete, Param, Query, Get, Patch, HttpCode,
   HttpStatus, Logger, UsePipes, UseGuards, UseInterceptors, UploadedFile, Req, Res
 } from '@nestjs/common';
+import { resolve } from 'path'
 import { Request, Response } from 'express';
 import { ApiResponse } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -19,7 +20,6 @@ import { PublicationQuery } from './query/publication.query';
 import { EventPattern } from '@nestjs/microservices';
 import { NotifyPublicationsDto } from './dto/notify-publications.dto';
 import contentValidationSchema from './validation/content-validation.schema'
-import path = require('path');
 
 @Controller('publications')
 export class PublicationController {
@@ -53,7 +53,7 @@ export class PublicationController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('photo', getMulterOptions()))
   @Post('/:id/photo')
-  public async upload(@Param('id') id: number, @UploadedFile() file: Express.Multer.File, @Req() req: Request) {
+  public async upload(@Param('id') id: number, @UploadedFile() file: Express.Multer.File) {
     return this.publicationService.updatePublication(id, { content: { photo: file.filename } });
   }
 
@@ -61,8 +61,8 @@ export class PublicationController {
   @UseInterceptors(FileInterceptor('photo', getMulterOptions()))
   @Get('/photo/:image')
   public async read(@Param('image') image: string, @Req() req: Request, @Res() res: Response) {
-    console.log(path.resolve(__dirname, process.env.FILE_UPLOAD_DEST, req.user['sub'], image))
-    return res.sendFile(path.resolve(__dirname, process.env.FILE_UPLOAD_DEST, req.user['sub'], image));
+    console.log(resolve(__dirname, process.env.FILE_UPLOAD_DEST, req.user['sub'], image))
+    return res.sendFile(resolve(__dirname, process.env.FILE_UPLOAD_DEST, req.user['sub'], image));
   }
 
   @UseGuards(JwtAuthGuard)
