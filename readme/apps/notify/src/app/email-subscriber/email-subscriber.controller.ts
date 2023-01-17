@@ -19,7 +19,7 @@ export class EmailSubscriberController {
     return this.subscriberService.addSubscriber(subscriber);
   }
 
-  @EventPattern({ cmd: CM.sendPublications })
+  @EventPattern({ cmd: CM.SendPublications })
   public async notify({ publications }: NotifyPublicationDto) {
     return this.subscriberService.sendNotifyNewPublication(publications);
   }

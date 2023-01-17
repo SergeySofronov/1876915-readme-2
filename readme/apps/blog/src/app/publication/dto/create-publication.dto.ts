@@ -22,8 +22,8 @@ export class CreatePublicationDto {
     example: 'true',
     required: true,
   })
-  @IsOptional()
   @IsBoolean()
+  @IsOptional()
   public isPublished?: boolean;
 
   @ApiProperty({
@@ -37,7 +37,8 @@ export class CreatePublicationDto {
   @TagMinLength(PV.TagMinLength, { message: VM.MinValueMessage })
   @TagMaxLength(PV.TagMaxLength, { message: VM.MaxValueMessage })
   @IsTagValidValue(new RegExp('^[a-z\\u0400-\\u04FF]+$', 'i'), { message: VM.IsValidValueMessage })
-  public tags: Tag[];
+  @IsOptional()
+  public tags?: Tag[];
 
   @ApiProperty({
     description: 'The content of the publication. Depends on the type of publication',
@@ -53,5 +54,8 @@ export class CreatePublicationDto {
     required: true,
   })
   @IsMongoId()
+  @IsOptional()
   public userId: string;
+
+  public photo: string;
 }

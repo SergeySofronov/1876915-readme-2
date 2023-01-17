@@ -1,18 +1,8 @@
 # Создать публикацию
 POST /blog/publications/ HTTP/1.1
 Host: localhost:3334
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2JkYmM5ODhhZTliZGNmY2U5NGUzNTciLCJlbWFpbCI6ImZpbGlkb3JAemVsZW5peS5ydSIsImZpcnN0TmFtZSI6ItCk0LjQu9C40LTQvtGAIiwibGFzdE5hbWUiOiLQl9C10LvRkdC90YvQuSIsImlhdCI6MTY3Mzg3MDQ5MywiZXhwIjoxNjczODcwNjczfQ.64AgFmMZSpX-8rDC4JbOqZ2FaWIy9vYXmyXm-Qo76_c
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1NGRjNmM4MDQ1YjhlYWE2M2NhODYiLCJlbWFpbCI6ImZpbGlkb3JAemVsZW5peTQucnUiLCJmaXJzdE5hbWUiOiJGaWxpZG9yIiwibGFzdE5hbWUiOiJaZWxlbml5IiwiaWF0IjoxNjczOTc0MzQ5LCJleHAiOjE2NzM5NzUzNDl9.KlopwE0ZXed8xvODLmoyGkYSGJ5lYqe1QztRLlTCWnY
 Content-Type: application/json
-
-# {
-#   "type": "Video",
-#   "tags": [{ "name": "#awesomevideo"}],
-#   "userId": "63b550eae01809667f8f668d",
-#   "content": {
-#     "title": "Гостья из будущего",
-#     "videoLink": "www.url.com"
-#   }
-# }
 
 {
   "type": "Video",
@@ -23,6 +13,14 @@ Content-Type: application/json
     "videoLink": "www.youtube.com/electronic"
   }
 }
+
+# {
+#   "type": "Photo",
+#   "tags": ["myvideo", "greatest", "myvideo"],
+#   "content": {
+#     "photo": "default.jpg"
+#   }
+# }
 ###
 
 # Редактировать публикацию
@@ -49,13 +47,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InZhbnlhM0BydXNzaWFuLnJ1I
 ###
 
 # Получить публикацию по ID
-GET /blog/publications/10 HTTP/1.1
+GET /blog/publications/4 HTTP/1.1
 Host: localhost:3334
 ###
 
 # Получить список публикаций (лимит, пагинация, сортировка, тэги, определенный пользователь)
-# ?limit=50&page=0&sortType=date&sortDirection=desc&tags=sometag1,sometag2&user=63a9bb63c0068095cdd7706a
-GET /blog/publications?limit=10&page=1&sortType=comment&sortDirection=desc&tags=myvideo#1&$userId=63b9e82c804280c503523c3d HTTP/1.1
+# ?limit=50&page=0&sortType=date&sortDirection=desc&tags=sometag1,sometag2&user=63a9bb63c0068095cdd7706a&searchInTitle=""
+GET /blog/publications?searchInTitle=При HTTP/1.1
 Host: localhost:3334
 ###
 
@@ -87,4 +85,24 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InZhbnlhM0BydXNzaWFuLnJ1I
 POST /blog/publications/repost/10 HTTP/1.1
 Host: localhost:3334
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InZhbnlhM0BydXNzaWFuLnJ1IiwidXNlcklkIjoiNjJiOWY3YjI3MGY0OTZjNjczODIyNzJjIiwibmFtZSI6IlZhbnlhIFJ1c3NpYW4iLCJhdmF0YXIiOiJSTjhkOTh1NVBDbU1CZGlTREdfcGIuanBlZyIsImlhdCI6MTY1NjgzNTYxMSwiZXhwIjoxNjU2ODc4ODExfQ.YHAwjl1xwaPXpAI2dTGAw2pX3sKnEUsWyVPdUlJsTAE
+###
+
+#  Загрузка фото для публикации
+POST /blog/publications/43/photo/ HTTP/1.1
+Host: localhost:3334
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1NGRjNmM4MDQ1YjhlYWE2M2NhODYiLCJlbWFpbCI6ImZpbGlkb3JAemVsZW5peTQucnUiLCJmaXJzdE5hbWUiOiJGaWxpZG9yIiwibGFzdE5hbWUiOiJaZWxlbml5IiwiaWF0IjoxNjczOTczODIyLCJleHAiOjE2NzM5NzQ4MjJ9.o329zIxRrDsq0oWzFks1pMDxPW0VkhudqLbKea-RQSg
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="photo"; filename="05.jpg"
+Content-Type: image/jpeg
+
+< D:/загрузки/05.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+###
+
+#  Получить фото для публикации
+GET /blog/publications/photo/056828.jpg HTTP/1.1
+Host: localhost:3334
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1NGRjNmM4MDQ1YjhlYWE2M2NhODYiLCJlbWFpbCI6ImZpbGlkb3JAemVsZW5peTQucnUiLCJmaXJzdE5hbWUiOiJGaWxpZG9yIiwibGFzdE5hbWUiOiJaZWxlbml5IiwiaWF0IjoxNjczOTc0MDQ0LCJleHAiOjE2NzM5NzUwNDR9.-eEm3YzGdU3yL7YG-Wsdo8ZYpj0tW-TOeOsQnRu2UN4
 ###

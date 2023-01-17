@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { ArrayMaxSize, IsArray, IsEnum, IsIn, IsMongoId, IsNumber, IsOptional } from 'class-validator';
+import { ArrayMaxSize, IsArray, IsEnum, IsIn, IsMongoId, IsNumber, IsOptional, IsString } from 'class-validator';
 import { ValidityMessage as VM } from '@readme/core';
 import { DEFAULT_PUBLICATION_QUERY_LIMIT, DEFAULT_PUBLICATION_SORT_DIRECTION, PublicationSort, PublicationValidity as PV } from '../publication.constant';
 
@@ -32,4 +32,8 @@ export class PublicationQuery {
   @IsMongoId()
   @IsOptional()
   public userId?: string;
+
+  @IsString()
+  @IsOptional()
+  public searchInTitle?: string = '';
 }

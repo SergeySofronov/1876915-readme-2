@@ -1,6 +1,11 @@
-import { Body, Post, Controller, Delete, Param, Query, Get, Patch, HttpCode, HttpStatus, Logger, UsePipes, UseGuards } from '@nestjs/common';
+import {
+  Body, Post, Controller, Delete, Param, Query, Get, Patch, HttpCode,
+  HttpStatus, Logger, UsePipes, UseGuards, UseInterceptors, UploadedFile, Req, Res
+} from '@nestjs/common';
+import { Request, Response } from 'express';
 import { ApiResponse } from '@nestjs/swagger';
-import { fillObject } from '@readme/core';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { fillObject, getMulterOptions } from '@readme/core';
 import { JwtAuthGuard } from '@readme/core';
 import { CommandEvent as CM } from '@readme/shared-types';
 import { PublicationService } from './publication.service';
@@ -14,6 +19,7 @@ import { PublicationQuery } from './query/publication.query';
 import { EventPattern } from '@nestjs/microservices';
 import { NotifyPublicationsDto } from './dto/notify-publications.dto';
 import contentValidationSchema from './validation/content-validation.schema'
+import path = require('path');
 
 @Controller('publications')
 export class PublicationController {
@@ -31,8 +37,8 @@ export class PublicationController {
     description: PublicationHandleMessages.CREATED,
   })
   @UsePipes(new PublicationValidationPipe(contentValidationSchema))
-  async create(@Body() dto: CreatePublicationDto) {
-    const newPublication = await this.publicationService.createPublication({ ...dto });
+  async create(@Body() dto: CreatePublicationDto, @Req() req: Request) {
+    const newPublication = await this.publicationService.createPublication({ ...dto, userId: req.user['sub'] });
     this.logger.log(`New publication created: ${newPublication}`);
     return fillObject(PublicationRto, newPublication);
   }
@@ -42,6 +48,21 @@ export class PublicationController {
   async update(@Param('id') id: number, @Body() dto: UpdatePublicationDto) {
     const updatedComment = await this.publicationService.updatePublication(id, dto);
     return fillObject(PublicationRto, updatedComment);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('photo', getMulterOptions()))
+  @Post('/:id/photo')
+  public async upload(@Param('id') id: number, @UploadedFile() file: Express.Multer.File, @Req() req: Request) {
+    return this.publicationService.updatePublication(id, { content: { photo: file.filename } });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('photo', getMulterOptions()))
+  @Get('/photo/:image')
+  public async read(@Param('image') image: string, @Req() req: Request, @Res() res: Response) {
+    console.log(path.resolve(__dirname, process.env.FILE_UPLOAD_DEST, req.user['sub'], image))
+    return res.sendFile(path.resolve(__dirname, process.env.FILE_UPLOAD_DEST, req.user['sub'], image));
   }
 
   @UseGuards(JwtAuthGuard)
@@ -75,7 +96,19 @@ export class PublicationController {
     this.publicationService.deletePublication(id);
   }
 
-  @EventPattern({ cmd: CM.getPublicationDate })
+  @UseGuards(JwtAuthGuard)
+  @Post('like/:isLike')
+  public async like(@Param('isLike') isLike: boolean, @Req() req: Request) {
+    throw new Error("Not implemented");
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('like/:isLike')
+  public async repost(@Param('isLike') isLike: boolean, @Req() req: Request) {
+    throw new Error("Not implemented");
+  }
+
+  @EventPattern({ cmd: CM.GetPublicationDate })
   public async notify(dto: NotifyPublicationsDto) {
     return await this.publicationService.sendPublicationForNotify(dto);
   }

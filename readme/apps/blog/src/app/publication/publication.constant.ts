@@ -1,4 +1,5 @@
 export const DEFAULT_PUBLICATION_QUERY_LIMIT = 25;
+export const DEFAULT_PUBLICATION_SEARCH_LIMIT = 20;
 export const DEFAULT_PUBLICATION_SORT_DIRECTION = 'desc';
 
 export const PublicationHandleMessages = {
@@ -22,7 +23,6 @@ export enum PublicationValidity {
   QuoteMaxLength = 300,
   QuoteAuthorMinLength = 3,
   QuoteAuthorMaxLength = 50,
-  PhotoMaxSize = 1024,
   LinkDescriptionMaxLength = 300,
 }
 

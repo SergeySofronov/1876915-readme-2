@@ -4,7 +4,7 @@ import { CRUDRepositoryInterface } from '@readme/core';
 import { Publication } from '@readme/shared-types';
 import { PublicationEntity } from './publication.entity';
 import { PublicationQuery } from './query/publication.query';
-import { DEFAULT_PUBLICATION_QUERY_LIMIT, PublicationSort, PublicationSortField } from './publication.constant';
+import { DEFAULT_PUBLICATION_QUERY_LIMIT, DEFAULT_PUBLICATION_SEARCH_LIMIT, PublicationSort, PublicationSortField } from './publication.constant';
 
 @Injectable()
 export class PublicationRepository implements CRUDRepositoryInterface<PublicationEntity, number, Publication> {
@@ -65,14 +65,23 @@ export class PublicationRepository implements CRUDRepositoryInterface<Publicatio
     sortDirection = 'desc',
     sortType = PublicationSort.Date,
     tags,
-    userId }: PublicationQuery, options?: Record<string, unknown>): Promise<Publication[]> {
+    userId,
+    searchInTitle = ''
+  }: PublicationQuery, options?: Record<string, unknown>): Promise<Publication[]> {
     const sortField = { [PublicationSortField[sortType]]: sortDirection };
-
+    if (searchInTitle) {
+      limit = DEFAULT_PUBLICATION_SEARCH_LIMIT;
+    }
+    console.log(searchInTitle)
     return this.prisma.publication.findMany({
       take: limit,
       where: {
         ...options ?? {},
         userId,
+        content: {
+          path: ['title'],
+          string_contains: searchInTitle,
+        },
         tags: {
           some: {
             name: {
