@@ -4,7 +4,8 @@ import { CRUDRepositoryInterface } from '@readme/core';
 import { Publication } from '@readme/shared-types';
 import { PublicationEntity } from './publication.entity';
 import { PublicationQuery } from './query/publication.query';
-import { DEFAULT_PUBLICATION_QUERY_LIMIT, DEFAULT_PUBLICATION_SEARCH_LIMIT, PublicationSort, PublicationSortField } from './publication.constant';
+import { PublicationQueryDefault as PQ, PublicationSort, PublicationSortField } from './publication.constant';
+import { Like } from '@prisma/client';
 
 @Injectable()
 export class PublicationRepository implements CRUDRepositoryInterface<PublicationEntity, number, Publication> {
@@ -59,8 +60,23 @@ export class PublicationRepository implements CRUDRepositoryInterface<Publicatio
     });
   }
 
+  public async findByCommentId(id: number): Promise<Publication | null> {
+    return this.prisma.publication.findFirst({
+      where: {
+        comments: {
+          some: {
+            id
+          }
+        }
+      },
+      include: {
+        tags: true,
+      }
+    });
+  }
+
   public async find({
-    limit = DEFAULT_PUBLICATION_QUERY_LIMIT,
+    limit = PQ.DEFAULT_PUBLICATION_QUERY_LIMIT,
     page = 1,
     sortDirection = 'desc',
     sortType = PublicationSort.Date,
@@ -70,7 +86,7 @@ export class PublicationRepository implements CRUDRepositoryInterface<Publicatio
   }: PublicationQuery, options?: Record<string, unknown>): Promise<Publication[]> {
     const sortField = { [PublicationSortField[sortType]]: sortDirection };
     if (searchInTitle) {
-      limit = DEFAULT_PUBLICATION_SEARCH_LIMIT;
+      limit = PQ.DEFAULT_PUBLICATION_SEARCH_LIMIT;
     }
     console.log(searchInTitle)
     return this.prisma.publication.findMany({
@@ -145,5 +161,41 @@ export class PublicationRepository implements CRUDRepositoryInterface<Publicatio
         tags: true,
       }
     })
+  }
+
+  public async findLike(publicationId: number, userId: string): Promise<Like> {
+    return this.prisma.like.findFirst({
+      where: {
+        AND: [
+          { publicationId },
+          { userId }
+        ]
+      },
+    });
+  }
+
+  public async updateLikes(id: number, isLike: boolean, userId: string, value = PQ.DEFAULT_INCREMENT_VALUE): Promise<Publication> {
+    const updateCountObject = isLike ? { increment: value } : { decrement: value };
+    const updateLikesObject = isLike ?
+      {
+        create: {
+          userId
+        }
+      } : {
+        delete: {
+          userId_publicationId: {
+            publicationId: id,
+            userId
+          }
+        }
+      };
+
+    return this.prisma.publication.update({
+      where: { id },
+      data: {
+        likesCount: updateCountObject,
+        likes: updateLikesObject,
+      },
+    });
   }
 }

@@ -31,7 +31,7 @@ export class PublicationEntity implements Entity<PublicationEntity, Publication>
     this.commentsCount = entity.commentsCount || 0;
     this.tags = entity.tags || [];
     this.content = entity.content;
-    this.isRepublication = false;
+    this.isRepublication = entity.isRepublication || false;
     this.originalUserId = entity.originalUserId || entity.userId;
     this.userId = entity.userId;
   }

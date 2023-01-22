@@ -1,13 +1,12 @@
 # Создать комментарий
 POST /blog/comments/ HTTP/1.1
 Host: localhost:3334
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InZhbnlhM0BydXNzaWFuLnJ1IiwidXNlcklkIjoiNjJiOWY3YjI3MGY0OTZjNjczODIyNzJjIiwibmFtZSI6IlZhbnlhIFJ1c3NpYW4iLCJhdmF0YXIiOiJSTjhkOTh1NVBDbU1CZGlTREdfcGIuanBlZyIsImlhdCI6MTY1NjgzNTYxMSwiZXhwIjoxNjU2ODc4ODExfQ.YHAwjl1xwaPXpAI2dTGAw2pX3sKnEUsWyVPdUlJsTAE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1NGRjNmM4MDQ1YjhlYWE2M2NhODYiLCJlbWFpbCI6ImZpbGlkb3JAemVsZW5peTQucnUiLCJmaXJzdE5hbWUiOiJGaWxpZG9yIiwibGFzdE5hbWUiOiJaZWxlbml5IiwiaWF0IjoxNjc0MzM0Njg3LCJleHAiOjE2NzQzMzU2ODd9.6RZxXy2jgJFHV8kH8mxBTh7BjL-suqnR3AHTY2LVAio
 Content-Type: application/json
 
 {
   "content": "Это короткий комментарий",
-  "userId": "63b550eae01809667f8f668d",
-  "publicationId": 1
+  "publicationId": 44
 }
 ###
 
@@ -29,7 +28,7 @@ Host: localhost:3334
 ###
 
 # Удалить комментарий (/:id комментария)
-DELETE  /blog/comments/10 HTTP/1.1
+DELETE  /blog/comments/19 HTTP/1.1
 Host: localhost:3334
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InZhbnlhM0BydXNzaWFuLnJ1IiwidXNlcklkIjoiNjJiOWY3YjI3MGY0OTZjNjczODIyNzJjIiwibmFtZSI6IlZhbnlhIFJ1c3NpYW4iLCJhdmF0YXIiOiJSTjhkOTh1NVBDbU1CZGlTREdfcGIuanBlZyIsImlhdCI6MTY1NjgzNTYxMSwiZXhwIjoxNjU2ODc4ODExfQ.YHAwjl1xwaPXpAI2dTGAw2pX3sKnEUsWyVPdUlJsTAE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1NGRjNmM4MDQ1YjhlYWE2M2NhODYiLCJlbWFpbCI6ImZpbGlkb3JAemVsZW5peTQucnUiLCJmaXJzdE5hbWUiOiJGaWxpZG9yIiwibGFzdE5hbWUiOiJaZWxlbml5IiwiaWF0IjoxNjc0MzM0Njg3LCJleHAiOjE2NzQzMzU2ODd9.6RZxXy2jgJFHV8kH8mxBTh7BjL-suqnR3AHTY2LVAio
 ###

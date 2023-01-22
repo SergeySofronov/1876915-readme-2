@@ -3,8 +3,8 @@ import { Publication } from '@readme/shared-types';
 import { EmailSubscriberRepository } from './email-subscriber.repository';
 import { CreateSubscriberDto } from './dto/create-subscriber.dto';
 import { EmailSubscriberEntity } from './email-subscriber.entity';
-import { EmailSubscriberMessages as EM } from './email-subscriber.constant';
 import { MailService } from '../mail/mail.service';
+import { SubscriberExistsException } from './exceptions';
 
 @Injectable()
 export class EmailSubscriberService {
@@ -18,7 +18,7 @@ export class EmailSubscriberService {
     const existsSubscriber = await this.emailSubscriberRepository.findByEmail(email);
 
     if (existsSubscriber) {
-      throw new Error(EM.ALREADY_EXISTS);
+      throw new SubscriberExistsException(email);
     }
 
     this.mailService.sendNotifyNewSubscriber(subscriber);

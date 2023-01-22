@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Subscriber, Publication } from '@readme/shared-types';
-import { EMAIL_ADD_PUBLICATION_SUBJECT, EMAIL_ADD_SUBSCRIBER_SUBJECT } from './mail.constant';
+import { EmailSubject } from './mail.constant';
 
 @Injectable()
 export class MailService {
@@ -10,7 +10,7 @@ export class MailService {
   public async sendNotifyNewSubscriber(subscriber: Subscriber) {
     await this.mailerService.sendMail({
       to: subscriber.email,
-      subject: EMAIL_ADD_SUBSCRIBER_SUBJECT,
+      subject: EmailSubject.EMAIL_ADD_SUBSCRIBER_SUBJECT,
       template: './add-subscriber',
       context: {
         user: `${subscriber.firstName} ${subscriber.lastName}`,
@@ -22,7 +22,7 @@ export class MailService {
   public async sendNotifyNewPublication(subscriber: Subscriber, publicationList: Publication[]) {
     await this.mailerService.sendMail({
       to: subscriber.email,
-      subject: EMAIL_ADD_PUBLICATION_SUBJECT,
+      subject: EmailSubject.EMAIL_ADD_PUBLICATION_SUBJECT,
       template: './add-publication',
       context: {
         user: `${subscriber.firstName} ${subscriber.lastName}`,

@@ -1,6 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Subscription } from '@readme/shared-types';
+import { UserNotFoundIdException } from '../auth/exceptions';
 import { UserRepository } from '../user/user.repository';
+import { UserAlreadySubscribedException, UserNotSubscribedException } from './exceptions';
 import { SubscriptionRepository } from './subscription.repository';
 
 @Injectable()
@@ -14,13 +16,13 @@ export class SubscriptionService {
     const { bloggerId, followerId } = dto;
     const existBlogger = await this.userRepository.findById(bloggerId);
     if (!existBlogger) {
-      throw new HttpException(`The user with id ${existBlogger} doesn't exist`, HttpStatus.NOT_FOUND);
+      throw new UserNotFoundIdException(bloggerId);
     }
 
     const existSub = await this.subscriptionRepository.find({ bloggerId, followerId });
 
     if (existSub) {
-      throw new HttpException(`User with id ${followerId} already subscribed on user with id ${bloggerId}`, HttpStatus.BAD_REQUEST);
+      throw new UserAlreadySubscribedException(followerId, bloggerId);
     }
 
     const newSub = await this.subscriptionRepository.create(dto);
@@ -33,7 +35,7 @@ export class SubscriptionService {
     const existSub = await this.subscriptionRepository.find({ bloggerId, followerId });
 
     if (!existSub) {
-      throw new HttpException(`The user with id ${followerId} is not subscribed to the user with id ${bloggerId}`, HttpStatus.BAD_REQUEST);
+      throw new UserNotSubscribedException(followerId, bloggerId);
     }
 
     await this.subscriptionRepository.destroy(existSub._id);

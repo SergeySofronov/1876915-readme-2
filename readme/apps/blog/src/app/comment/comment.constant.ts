@@ -1,5 +1,7 @@
-export const DEFAULT_COMMENT_QUERY_LIMIT = 1;
-export const DEFAULT_COMMENT_SORT_DIRECTION = 'desc';
+export const CommentQueryDefault = {
+  DEFAULT_COMMENT_QUERY_LIMIT : 1,
+  DEFAULT_COMMENT_SORT_DIRECTION : 'desc',
+} as const;
 
 export const CommentHandleMessages = {
   CREATED: 'The new comment has been successfully created.',

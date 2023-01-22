@@ -23,4 +23,11 @@ export class DetailedPublicationRto extends PublicationRto {
   })
   @Expose()
   originalUserId: string;
+
+  @ApiProperty({
+    description: 'A sign that the publication is a repost',
+    example: 'true/false',
+  })
+  @Expose()
+  isRepublication: string;
 }

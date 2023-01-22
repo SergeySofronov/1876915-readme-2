@@ -14,4 +14,6 @@ export * from './lib/config/rabbitmq.config';
 export * from './lib/config/file-upload.config';
 export * from './lib/guards/jwt-auth.guard';
 export * from './lib/strategies/jwt.strategy';
+export * from './lib/decorators/boolean-param.decorator';
+export * from './lib/exceptions/user-not-registered.exception';
 

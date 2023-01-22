@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Comment } from '@readme/shared-types';
+import { PublicationNotFoundException } from '../publication/exceptions';
+import { CommentNotFoundException, CommentNotOwnerException } from './exceptions';
 import { PublicationRepository } from '../publication/publication.repository';
 import { CommentEntity } from './comment.entity';
 import { CommentRepository } from './comment.repository';
@@ -15,20 +17,26 @@ export class CommentService {
   ) { }
 
   public async createComment(dto: CreateCommentDto): Promise<Comment> {
-    const existPublication = await this.publicationRepository.findById(dto.publicationId);
+    const publicationId = dto.publicationId;
+    const existPublication = await this.publicationRepository.findById(publicationId);
     if (!existPublication) {
-      throw new Error(`Publication with id ${dto.publicationId} doesn't exist`);
+      throw new PublicationNotFoundException(publicationId);
     }
     const commentEntity = new CommentEntity(dto);
-    return this.commentRepository.create(commentEntity);
+    return this.commentRepository.create(commentEntity, publicationId);
   }
 
-  public async deleteComment(id: number): Promise<void> {
+  public async deleteComment(id: number, userId: string): Promise<void> {
     const existComment = await this.commentRepository.findById(id);
+    const existPublication = await this.publicationRepository.findByCommentId(id);
     if (!existComment) {
-      throw new Error(`Publication with id ${id} doesn't exist`)
+      throw new CommentNotFoundException(id);
     }
-    this.commentRepository.destroy(id);
+    if (existComment.userId !== userId) {
+      throw new CommentNotOwnerException(id, userId);
+    }
+
+    this.commentRepository.destroy(id, [existPublication.id]);
   }
 
   public async getComment(id: number): Promise<Comment> {
@@ -42,8 +50,9 @@ export class CommentService {
   public async updateComment(id: number, dto: UpdateCommentDto): Promise<Comment> {
     const existComment = await this.commentRepository.findById(id);
     if (!existComment) {
-      throw new Error(`Publication with id ${id} doesn't exist`)
+      throw new CommentNotFoundException(id);
     }
+
     return this.commentRepository.update(id, { ...dto, updatedAt: new Date() });
   }
 }
