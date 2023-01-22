@@ -8,6 +8,7 @@ export * from './lib/env-schemas/env.mail.schema';
 export * from './lib/env-schemas/env.mongo.schema';
 export * from './lib/env-schemas/env.rabbit.schema';
 export * from './lib/env-schemas/file-upload.schema';
+export * from './lib/env-schemas/env.app-port.schema';
 export * from './lib/config/jwt.config';
 export * from './lib/config/mongodb.config';
 export * from './lib/config/rabbitmq.config';
