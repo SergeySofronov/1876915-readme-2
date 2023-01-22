@@ -97,15 +97,17 @@ export class PublicationController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('like/:isLike')
-  public async like(@Param('isLike') isLike: boolean, @Req() req: Request) {
-    throw new Error("Not implemented");
+  @Post('likes/:id')
+  public async like(@Param('id') id: number, @Query() { isLike }: PublicationQuery, @Req() req: Request) {
+    const publication = await this.publicationService.updatePublicationLikes(id, isLike, req.user['sub']);
+    return fillObject(PublicationRto, publication);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('like/:isLike')
-  public async repost(@Param('isLike') isLike: boolean, @Req() req: Request) {
-    throw new Error("Not implemented");
+  @Post('repost/:id')
+  public async repost(@Param('id') id: number, @Req() req: Request) {
+    const publication = await this.publicationService.repostPublication(id, req.user['sub']);
+    return fillObject(DetailedPublicationRto, publication);
   }
 
   @EventPattern({ cmd: CM.GetPublicationDate })

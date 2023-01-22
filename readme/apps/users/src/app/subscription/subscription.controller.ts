@@ -1,11 +1,10 @@
 import { ApiTags } from '@nestjs/swagger';
 import { Controller, Body, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { fillObject, JwtAuthGuard } from '@readme/core';
+import { fillObject, JwtAuthGuard, SubscribeParamDecorator } from '@readme/core';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { SubscriptionRdo } from './rdo/subscription.rdo';
 import { SubscriptionService } from './subscription.service';
-import { SubscribeParamDecorator } from './decorators/sгbscribe-param.decorator';
 
 @ApiTags('subscriptions')
 @Controller('subscriptions')

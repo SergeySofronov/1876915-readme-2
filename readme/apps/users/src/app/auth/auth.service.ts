@@ -1,17 +1,17 @@
-import { Inject, Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy } from '@nestjs/microservices';
 import { CommandEvent, User, Subscriber, NotifyPublicationDate, RabbitClient } from '@readme/shared-types';
 import { createEvent } from '@readme/core'
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from '../user/user.entity';
-import { UserAuthMessages } from './auth.constant';
 import { UserRepository } from '../user/user.repository';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ChangeUserPasswordDto } from './dto/change-user-password.dto';
 import { existsSync, unlinkSync } from 'fs';
 import { resolve } from 'path'
+import { UserExistsException, UserNotFoundEmailException, UserNotFoundIdException, UserPasswordWrongException } from './exceptions';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +27,7 @@ export class AuthService {
     const existUser = await this.userRepository.findByEmail(email);
 
     if (existUser) {
-      throw new HttpException(UserAuthMessages.ALREADY_EXISTS, HttpStatus.BAD_REQUEST);
+      throw new UserExistsException(email);
     }
 
     const userEntity = await new UserEntity(dto).setPassword(password);
@@ -51,12 +51,12 @@ export class AuthService {
     const existUser = await this.userRepository.findByEmail(email);
 
     if (!existUser) {
-      throw new HttpException(UserAuthMessages.NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new UserNotFoundEmailException(dto.email);
     }
 
     const userEntity = new UserEntity(existUser);
     if (! await userEntity.comparePassword(password)) {
-      throw new HttpException(UserAuthMessages.WRONG_PASSWORD, HttpStatus.BAD_REQUEST);
+      throw new UserPasswordWrongException();
     }
 
     return userEntity.toObject();
@@ -65,7 +65,7 @@ export class AuthService {
   public async getUser(id: string) {
     const existUser = await this.userRepository.findById(id);
     if (!existUser) {
-      throw new HttpException(UserAuthMessages.NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new UserNotFoundIdException(id);
     }
 
     return existUser;
@@ -117,12 +117,12 @@ export class AuthService {
     const existUser = await this.userRepository.findById(id);
 
     if (!existUser) {
-      throw new HttpException(UserAuthMessages.NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new UserNotFoundIdException(id);
     }
 
     const userEntity = new UserEntity(existUser);
     if (! await userEntity.comparePassword(oldPassword)) {
-      throw new HttpException(UserAuthMessages.WRONG_PASSWORD, HttpStatus.BAD_REQUEST);
+      throw new UserPasswordWrongException();
     }
     await userEntity.setPassword(newPassword);
     return this.userRepository.update(id, userEntity.toObject())

@@ -9,26 +9,50 @@ import { CommentQuery } from './query/comment.query';
 export class CommentRepository implements CRUDRepositoryInterface<CommentEntity, number, Comment> {
   constructor(private readonly prisma: PrismaService) { }
 
-  public async create(item: CommentEntity): Promise<Comment> {
+  public async create(item: CommentEntity, id: number): Promise<Comment> {
     const { content, publicationId, userId } = item.toObject();
-
-    return this.prisma.comment.create({
-      data: {
-        content,
-        userId,
-        publication: {
-          connect: { id: publicationId }
+    const [comment] = await this.prisma.$transaction([
+      this.prisma.comment.create({
+        data: {
+          content,
+          userId,
+          publication: {
+            connect: { id: publicationId }
+          }
         }
-      }
-    });
+      }),
+      this.prisma.publication.update({
+        where: { id },
+        data: {
+          commentsCount: {
+            increment: 1
+          },
+        }
+      })
+    ]);
+
+    return comment
   }
 
-  public async destroy(id: number): Promise<void> {
-    await this.prisma.comment.delete({
-      where: {
-        id,
-      }
-    });
+  public async destroy(commentId: number, [publicationId]): Promise<void> {
+    await
+      this.prisma.$transaction([
+        this.prisma.comment.delete({
+          where: {
+            id: commentId,
+          }
+        }),
+        this.prisma.publication.update({
+          where: {
+            id: publicationId
+          },
+          data: {
+            commentsCount: {
+              decrement: 1
+            },
+          }
+        })
+      ]);
   }
 
   public findById(id: number): Promise<Comment | null> {

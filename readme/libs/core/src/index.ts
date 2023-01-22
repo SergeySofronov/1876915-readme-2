@@ -8,10 +8,13 @@ export * from './lib/env-schemas/env.mail.schema';
 export * from './lib/env-schemas/env.mongo.schema';
 export * from './lib/env-schemas/env.rabbit.schema';
 export * from './lib/env-schemas/file-upload.schema';
+export * from './lib/env-schemas/env.app-port.schema';
 export * from './lib/config/jwt.config';
 export * from './lib/config/mongodb.config';
 export * from './lib/config/rabbitmq.config';
 export * from './lib/config/file-upload.config';
 export * from './lib/guards/jwt-auth.guard';
 export * from './lib/strategies/jwt.strategy';
+export * from './lib/decorators/boolean-param.decorator';
+export * from './lib/exceptions/user-not-registered.exception';
 

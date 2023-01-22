@@ -1,5 +1,9 @@
-import { Body, Post, Controller, Delete, Param, Query, HttpCode, HttpStatus, Get, Patch, UseGuards } from '@nestjs/common';
+import {
+  Body, Post, Controller, Delete, Param, Query, HttpCode, HttpStatus,
+  Get, Patch, UseGuards, Req
+} from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
+import { Request } from 'express';
 import { fillObject } from '@readme/core';
 import { JwtAuthGuard } from '@readme/core';
 import { CommentHandleMessages } from './comment.constant';
@@ -23,8 +27,8 @@ export class CommentController {
     status: HttpStatus.CREATED,
     description: CommentHandleMessages.CREATED,
   })
-  async create(@Body() dto: CreateCommentDto) {
-    const newComment = await this.commentService.createComment({ ...dto });
+  async create(@Req() req: Request, @Body() dto: CreateCommentDto) {
+    const newComment = await this.commentService.createComment({ ...dto, userId: req.user['sub'] });
     return fillObject(CommentRto, newComment);
   }
 
@@ -48,8 +52,7 @@ export class CommentController {
     status: HttpStatus.NO_CONTENT,
     description: CommentHandleMessages.DELETED,
   })
-  async destroy(@Param('id') id: string) {
-    const commentId = parseInt(id, 10);
-    this.commentService.deleteComment(commentId);
+  async destroy(@Param('id') id: number, @Req() req: Request) {
+    this.commentService.deleteComment(id, req.user['sub']);
   }
 }

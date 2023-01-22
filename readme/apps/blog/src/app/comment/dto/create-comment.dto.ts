@@ -1,15 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, MaxLength, MinLength, IsMongoId } from 'class-validator';
+import { IsNumber, MaxLength, MinLength} from 'class-validator';
 import { ValidityMessage as VM } from '@readme/core';
 import { CommentValidity as CV } from '../comment.constant';
 
 export class CreateCommentDto {
-  @ApiProperty({
-    description: 'User unique identifier',
-    example: '62af63e1dd748f35bcf66943',
-    required: true,
-  })
-  @IsMongoId()
+  //Проверки поля удалены, т.к. используется содержимое токена
   public userId: string;
 
   @ApiProperty({

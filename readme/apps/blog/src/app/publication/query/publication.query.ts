@@ -1,14 +1,14 @@
 import { Transform } from 'class-transformer';
-import { ArrayMaxSize, IsArray, IsEnum, IsIn, IsMongoId, IsNumber, IsOptional, IsString } from 'class-validator';
+import { ArrayMaxSize, IsArray, IsBoolean, IsEnum, IsIn, IsMongoId, IsNumber, IsOptional, IsString } from 'class-validator';
 import { ValidityMessage as VM } from '@readme/core';
-import { DEFAULT_PUBLICATION_QUERY_LIMIT, DEFAULT_PUBLICATION_SORT_DIRECTION, PublicationSort, PublicationValidity as PV } from '../publication.constant';
+import { PublicationQueryDefault as PQ, PublicationValidity as PV, PublicationSort } from '../publication.constant';
 
 
 export class PublicationQuery {
-  @Transform(({ value }) => +value || DEFAULT_PUBLICATION_QUERY_LIMIT)
+  @Transform(({ value }) => +value || PQ.DEFAULT_PUBLICATION_QUERY_LIMIT)
   @IsNumber()
   @IsOptional()
-  public limit?= DEFAULT_PUBLICATION_QUERY_LIMIT;
+  public limit?: number = PQ.DEFAULT_PUBLICATION_QUERY_LIMIT;
 
   @Transform(({ value }) => +value)
   @IsNumber()
@@ -21,7 +21,7 @@ export class PublicationQuery {
 
   @IsIn(['asc', 'desc'])
   @IsOptional()
-  public sortDirection?: 'desc' | 'asc' = DEFAULT_PUBLICATION_SORT_DIRECTION;
+  public sortDirection?: 'desc' | 'asc' = PQ.DEFAULT_PUBLICATION_SORT_DIRECTION;
 
   @Transform(({ value }) => value.split(','))
   @ArrayMaxSize(PV.TagsMaxQuantity, { message: VM.IsArrayMaxSizeMessage })
@@ -36,4 +36,9 @@ export class PublicationQuery {
   @IsString()
   @IsOptional()
   public searchInTitle?: string = '';
+
+  @Transform(({ value }) => (value === '1' || value === 'true') ? true : false)
+  @IsBoolean()
+  @IsOptional()
+  public isLike?: boolean;
 }

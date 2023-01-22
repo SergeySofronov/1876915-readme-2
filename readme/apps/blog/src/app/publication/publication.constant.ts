@@ -1,6 +1,9 @@
-export const DEFAULT_PUBLICATION_QUERY_LIMIT = 25;
-export const DEFAULT_PUBLICATION_SEARCH_LIMIT = 20;
-export const DEFAULT_PUBLICATION_SORT_DIRECTION = 'desc';
+export const PublicationQueryDefault = {
+  DEFAULT_PUBLICATION_QUERY_LIMIT: 25,
+  DEFAULT_PUBLICATION_SEARCH_LIMIT: 20,
+  DEFAULT_PUBLICATION_SORT_DIRECTION: 'desc',
+  DEFAULT_INCREMENT_VALUE: 1,
+} as const;
 
 export const PublicationHandleMessages = {
   CREATED: 'The new publication has been successfully created.',

@@ -1,0 +1,88 @@
+# Создать (зарегистрировать) пользователя
+POST /bff/users/register HTTP/1.1
+Host: localhost:3333
+Content-Type: application/json
+
+{
+  "email": "filidor@zeleniy4.ru",
+  "dateBirth": "1965-11-17",
+  "firstName": "Филидор",
+  "lastName": "Зелёный",
+  "password": "123456"
+}
+
+# Редактировать пользователя (WIP)
+PATCH /bff/users/ HTTP/1.1
+Host: localhost:3333
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1NGRjNmM4MDQ1YjhlYWE2M2NhODYiLCJlbWFpbCI6ImZpbGlkb3JAemVsZW5peTQucnUiLCJmaXJzdE5hbWUiOiLQpNC40LvQuNC00L7RgCIsImxhc3ROYW1lIjoi0JfQtdC70LXQvdGL0LkiLCJpYXQiOjE2NzM5Njg1OTcsImV4cCI6MTY3Mzk2OTU5N30.rNvys3HHUmKhAPig94YnFg2C1uSAJL6csPpo1YuBujU
+Content-Type: application/json
+
+{
+  "firstName": "Filidor",
+  "lastName": "Zeleniy"
+}
+###
+
+# Изменить пароль пользоватьеля (WIP)
+PATCH  /bff/users/pass HTTP/1.1
+Host: localhost:3333
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1NGRjNmM4MDQ1YjhlYWE2M2NhODYiLCJlbWFpbCI6ImZpbGlkb3JAemVsZW5peTQucnUiLCJmaXJzdE5hbWUiOiJGaWxpZG9yIiwibGFzdE5hbWUiOiJaZWxlbml5IiwiaWF0IjoxNjczOTc4NjM5LCJleHAiOjE2NzM5Nzk2Mzl9.iC_gwuQ-BHmF9CKlyZinocGRAlP_h82jWsD9DsioRNw
+Content-Type: application/json
+
+{
+  "oldPassword": "123456",
+  "newPassword": "987654"
+}
+###
+
+# Получить детальную информацию пользователя по ID
+GET /bff/users/63c54dc6c8045b8eaa63ca86 HTTP/1.1
+Host: localhost:3333
+###
+
+# Авторизоваться (получить токен)
+POST /bff/users/login HTTP/1.1
+Host: localhost:3333
+Content-Type: application/json
+
+{
+  "email": "filidor@zeleniy4.ru",
+  "password": "123456"
+}
+###
+
+# Запуск рассылки уведомлений
+POST  /bff/users/notify HTTP/1.1
+Host: localhost:3333
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1NGRjNmM4MDQ1YjhlYWE2M2NhODYiLCJlbWFpbCI6ImZpbGlkb3JAemVsZW5peTQucnUiLCJmaXJzdE5hbWUiOiLQpNC40LvQuNC00L7RgCIsImxhc3ROYW1lIjoi0JfQtdC70ZHQvdGL0LkiLCJpYXQiOjE2NzM4Nzg1NzgsImV4cCI6MTY3Mzg3ODc1OH0.06kJE_ZWWFfMgbeaX11VxiM6lW_B2phDJXqQiKDGcZg
+###
+
+#  Отправка аватарки пользователю
+POST /bff/users/avatar HTTP/1.1
+Host: localhost:3333
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1NGRjNmM4MDQ1YjhlYWE2M2NhODYiLCJlbWFpbCI6ImZpbGlkb3JAemVsZW5peTQucnUiLCJmaXJzdE5hbWUiOiLQpNC40LvQuNC00L7RgCIsImxhc3ROYW1lIjoi0JfQtdC70LXQvdGL0LkiLCJpYXQiOjE2NzM5Njg1OTcsImV4cCI6MTY3Mzk2OTU5N30.rNvys3HHUmKhAPig94YnFg2C1uSAJL6csPpo1YuBujU
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="avatar"; filename="04.jpg"
+Content-Type: image/jpeg
+
+< D:/загрузки/04.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="firstName"
+Content-Type: application/json
+
+Филидор
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="lastName"
+Content-Type: application/json
+
+Зеленый
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+###
+
+#  Получить аватарку пользователя
+GET /bff/users/avatar/042783.jpg HTTP/1.1
+Host: localhost:3333
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1NGRjNmM4MDQ1YjhlYWE2M2NhODYiLCJlbWFpbCI6ImZpbGlkb3JAemVsZW5peTQucnUiLCJmaXJzdE5hbWUiOiJGaWxpZG9yIiwibGFzdE5hbWUiOiJaZWxlbml5IiwiaWF0IjoxNjczOTY5NDkxLCJleHAiOjE2NzM5NzA0OTF9.TDJ73XdbXh7cD_a2H8V_w2cOGTZVdlTJp6Pdx8tPraE
+###
